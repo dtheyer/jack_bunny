@@ -10,6 +10,12 @@
 
 	<body>
 		<div class="container">
+                        <p>Fork of <strong>jack_bunny</strong> originally written by <a href="https://github.com/jackyang127/jack_bunny">jackyang127</a>. Few improvements:</p>
+                        <ul>
+                          <li>Cleaned up requirements.txt from indirect dependencies.</li>
+                          <li>Wrote Dockerfile and Makefile to easily run the app in a container.</li>
+                          <li>Cleaned pre-existing shortcuts (only kept Google and DuckDuckGo), everything else is up to the person/company to setup.</li>
+                        </ul>
 			<p> This is inspired by the bunnylol search engine at facebook. There's an open
 				version currently available, released by Charlie Cheever at <a href="https://github.com/ccheever/bunny1">bunny1</a>
 				but it hasn't been updated in a while so I decided to release my own. I included more commands
@@ -18,10 +24,11 @@
 			<ul>
 				<li> Open settings. Scroll down to the section where it says "Search engine" </li>
 				<li> Click 'Manage search engines'. Next to 'Other search engines', click the ADD button </li>
-				<li> Name the 'Search engine' and 'Keyword' field whatever you want. Inside the URL field, paste this: http://bunny.jackjyang.com/q/?query=%s </li>
+				<li> Name the 'Search engine' and 'Keyword' field whatever you want. Inside the URL field, paste this: http://[BUNNYLOL_DOMAIN]/q/?query=%s </li>
 				<li> Set this search engine to your default </li>
 				<li> Type 'help' into your address bar to see which commands are currently available </li>
 			<ul>
+                        <p>Other, <em>possibly outdated</em>, instructions can be found on <a href="http://www.bunny1.org/">bunny1</a>.</p>
 		</div>
 	</body>
 </html>
