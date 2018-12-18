@@ -15,6 +15,8 @@ Build and run docker locally
 $ make run-docker
 ```
 
+by default it runs on port 7015, customize it in the Makefile.
+
 Stop and delete the docker container
 
 ```
