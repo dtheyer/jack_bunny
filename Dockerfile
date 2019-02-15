@@ -3,7 +3,7 @@ FROM python:3.7.1-alpine3.8
 RUN apk update && apk --no-cache add nginx
 
 COPY code ./
-RUN pip install --no-cache-dir -r /jack_bunny/requirements.txt
+RUN pip install --upgrade pip && pip install --no-cache-dir -r /jack_bunny/requirements.txt
 
 WORKDIR /jack_bunny
 

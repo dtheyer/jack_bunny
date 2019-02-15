@@ -1,10 +1,32 @@
-from flask import request, Flask, render_template, redirect
+import logging
+
+from flask import Flask
+from flask import redirect
+from flask import render_template
+from flask import request
+from functools import wraps
 
 app = Flask(__name__)
+
+LOG_FILENAME = '/var/log/nginx/bunnylol.log'
+logging.basicConfig(
+        filename=LOG_FILENAME,
+        format="%(asctime)s\t%(name)s:%(levelname)s:call:%(message)s",
+        level=logging.DEBUG,
+)
+
+
+def log_calls(f):
+        @wraps(f)
+        def decorated(*args, **kwargs):
+                logging.info(f.__name__)
+                return f(*args, **kwargs)
+        return decorated
 
 
 class Commands(object):
 
+        @log_calls
         def g(arg=None):
                 """'g [search_query]' search Google"""
                 if arg:
@@ -12,6 +34,7 @@ class Commands(object):
                 else:
                         return 'https://www.google.com'
 
+        @log_calls
         def d(arg=None):
                 """'d [search_query]' search DuckDuckGo"""
                 if arg:
@@ -19,6 +42,7 @@ class Commands(object):
                 else:
                         return 'https://duckduckgo.com/'
 
+        @log_calls
         def help(arg=None):
                 """'help' returns a list of usable commands """
                 help_list = []
