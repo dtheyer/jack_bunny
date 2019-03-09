@@ -39,6 +39,8 @@ $ make attach-docker
 - Set this search engine to your default.
 - Type 'help' into your address bar to see what commands are currently available.
 
+Other browsers will likely have similar instructions.
+
 ----
 Original README
 ----

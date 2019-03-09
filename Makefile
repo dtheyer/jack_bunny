@@ -21,3 +21,6 @@ clear-docker:
 	docker stop `docker ps | grep ${DOCKER_IMAGE_NAME} | awk '{print $$1;}'` || true
 	docker rm `docker ps -a | grep ${DOCKER_IMAGE_NAME} | awk '{print $$1;}'` || true
 
+read-logs:
+	docker exec ${DOCKER_IMAGE_NAME} cat /var/log/nginx/{access,error,jack_bunny}.log
+

@@ -86,7 +86,7 @@ def route():
                 return redirect(url)
         except Exception as e:
                 # Fallback option is to google search.
-                print(e)
+                logging.error(str(e) + ' %s' % str(request))
                 return redirect(Commands.g(query))
 
 
