@@ -27,7 +27,7 @@ def log_calls(f):
 class Commands(object):
 
         @log_calls
-        def g(arg=None):
+        def g(self, arg=None):
                 """'g [search_query]' search Google"""
                 if arg:
                         return 'http://www.google.com/search?q={0}'.format(arg)
@@ -35,7 +35,7 @@ class Commands(object):
                         return 'https://www.google.com'
 
         @log_calls
-        def d(arg=None):
+        def d(self, arg=None):
                 """'d [search_query]' search DuckDuckGo"""
                 if arg:
                         return 'https://duckduckgo.com/?q={0}'.format(arg)
@@ -43,7 +43,7 @@ class Commands(object):
                         return 'https://duckduckgo.com/'
 
         @log_calls
-        def help(arg=None):
+        def help(self, arg=None):
                 """'help' returns a list of usable commands """
                 help_list = []
                 for values in Commands.__dict__.values():
@@ -76,7 +76,7 @@ def route():
                 option_args = None
 
         try:
-                command = getattr(Commands, search_command)
+                command = getattr(Commands(), search_command)
                 if search_command == 'help':
                         return render_template(
                                 'help.html',
@@ -87,7 +87,7 @@ def route():
         except Exception as e:
                 # Fallback option is to google search.
                 logging.error(str(e) + ' %s' % str(request))
-                return redirect(Commands.g(query))
+                return redirect(Commands().g(query))
 
 
 if __name__ == '__main__':
