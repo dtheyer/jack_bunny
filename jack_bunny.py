@@ -47,7 +47,6 @@ def log_calls(f):
 
 class Commands(object):
 
-
         @log_calls
         def help(self, arg=None):
                 """'help' returns a list of usable commands """
@@ -56,10 +55,6 @@ class Commands(object):
                         if callable(values):
                                 help_list.append(values.__doc__)
                 return help_list
-
-        # [CUSTOM SHORTCUTS] Add your company shortcuts here.
-        # [END CUSTOM SHORTCUTS]
-
 
 @app.route('/')
 def index():
