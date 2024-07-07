@@ -9,4 +9,4 @@ ENV FLASK_RUN_HOST=0.0.0.0
 
 EXPOSE 5000
 COPY . .
-CMD ["flask", "run"]
+CMD ["flask", "run", "--debug"]

@@ -6,10 +6,11 @@ from flask import Flask
 from flask import redirect
 from flask import render_template
 from flask import request
+from flask import url_for
 from functools import wraps
+from lib.dnd import DndCommand
+from lib.query_pass import QueryPassCommand
 
-
-app = Flask(__name__)
 
 LOG_FILENAME = '/data/jack_bunny.log'
 logging.basicConfig(
@@ -17,6 +18,20 @@ logging.basicConfig(
         format="%(asctime)s\t%(name)s:%(levelname)s:call:%(message)s",
         level=logging.DEBUG,
 )
+
+
+app = Flask(__name__)
+dnd = DndCommand()
+google = QueryPassCommand('g', 'https://www.google.com/search')
+ddgo = QueryPassCommand('d', 'https://duckduckgo.com/')
+
+app.add_url_rule(google.flask_routes()[0], view_func=google.gen_response, endpoint="google")
+app.add_url_rule(ddgo.flask_routes()[0], view_func=ddgo.gen_response, endpoint="ddgo")
+
+
+for r in dnd.flask_routes():
+    app.add_url_rule(r, view_func=dnd.gen_response)
+
 
 
 def log_calls(f):
@@ -29,26 +44,6 @@ def log_calls(f):
 
 class Commands(object):
 
-        @log_calls
-        def g(self, arg=None):
-                """'g [search_query]' search Google"""
-                if arg:
-                        return 'http://www.google.com/search?q={0}'.format(arg)
-                else:
-                        return 'https://www.google.com'
-
-        @log_calls
-        def d20(self, arg=None):
-                roll = random.randint(1, 20)
-                return f'You got a {roll}!'
-
-        @log_calls
-        def d(self, arg=None):
-                """'d [search_query]' search DuckDuckGo"""
-                if arg:
-                        return 'https://duckduckgo.com/?q={0}'.format(arg)
-                else:
-                        return 'https://duckduckgo.com/'
 
         @log_calls
         def help(self, arg=None):
@@ -75,30 +70,12 @@ def route():
                 query = str(request.args.get('query', ''))
                 tokenized_query = query.split(' ', 1)
                 search_command = tokenized_query[0].lower()
-                option_args = None
-                if len(tokenized_query) == 2:
-                        option_args = tokenized_query[1]
+                new_url = request.host_url + f"/{search_command}?q={str(request.args.get('query', ''))}"
+                logging.info(new_url)
+                return redirect(new_url)
         except Exception as e:
                 print(e)
-                search_command = query
-                option_args = None
-
-        try:
-                command = getattr(Commands(), search_command)
-                if search_command == 'help':
-                        return render_template(
-                                'help.html',
-                                command_list=command(None)
-                        )
-                url = command(option_args)
-                if not "http" in url:
-                    return url
-                return redirect(url)
-        except Exception as e:
-                # Fallback option is to google search.
-                logging.error(str(e) + ' %s' % str(request))
-                return redirect(Commands().g(query))
-
+                return f"{e} :: {request}"
 
 if __name__ == '__main__':
         app.run()
