@@ -1,6 +1,6 @@
 # Fork of jack_bunny
 
-Fork of [jack_bunny](https://github.com/jackyang127/jack_bunny) aimed to be more configurable and easily integrate with traefik and authalia. Intended only for light home use on a private network.
+Fork of [jack_bunny](https://github.com/jackyang127/jack_bunny) aimed to be more configurable and easily integrate with traefik and authelia. Intended only for light home use on a private network.
 
 
 ### Installing on Google Chrome

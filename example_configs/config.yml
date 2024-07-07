@@ -1,0 +1,13 @@
+routes:
+  google:
+    class: QueryPassCommand
+    args:
+      route: 'g'
+      target: 'https://www.google.com/search'
+  duck_duck_go:
+    class: QueryPassCommand
+    args:
+      route: 'd'
+      target: 'https://duckduckgo.com/'
+  dnd:
+    class: DndCommand 

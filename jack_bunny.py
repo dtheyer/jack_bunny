@@ -1,5 +1,7 @@
 from importlib.metadata import version
+import sys
 import logging
+import yaml
 import random
 
 from flask import Flask
@@ -10,9 +12,11 @@ from flask import url_for
 from functools import wraps
 from lib.dnd import DndCommand
 from lib.query_pass import QueryPassCommand
+from lib.simple_redirect import SimpleRedirectCommand
 
-
+CONFIG_FILENAME = '/data/config.yml'
 LOG_FILENAME = '/data/jack_bunny.log'
+
 logging.basicConfig(
         filename=LOG_FILENAME,
         format="%(asctime)s\t%(name)s:%(levelname)s:call:%(message)s",
@@ -21,18 +25,17 @@ logging.basicConfig(
 
 
 app = Flask(__name__)
-dnd = DndCommand()
-google = QueryPassCommand('g', 'https://www.google.com/search')
-ddgo = QueryPassCommand('d', 'https://duckduckgo.com/')
 
-app.add_url_rule(google.flask_routes()[0], view_func=google.gen_response, endpoint="google")
-app.add_url_rule(ddgo.flask_routes()[0], view_func=ddgo.gen_response, endpoint="ddgo")
+with open(CONFIG_FILENAME, 'r') as config_file:
+    config = yaml.safe_load(config_file)
+    logging.info(config)
 
-
-for r in dnd.flask_routes():
-    app.add_url_rule(r, view_func=dnd.gen_response)
-
-
+    for name, route_data in config["routes"].items():
+        args = route_data.get('args', {})
+        instance = getattr(sys.modules[__name__], route_data["class"])(**args)
+        logging.info(instance)
+        for r in instance.flask_routes():
+            app.add_url_rule(r, view_func=instance.gen_response, endpoint=name)
 
 def log_calls(f):
         @wraps(f)
